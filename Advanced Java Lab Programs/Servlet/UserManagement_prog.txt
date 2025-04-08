@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>User Information Page</h1>
+<form action="userinfo" method="post">
+Name:<input type="text" name="name"><br>
+EMail:<input type="text" name="mail"><br>
+Password:<input type="text" name="pword"><br>
+phoneNo:<input type="text" name="phno"><br>
+<input type="submit" value="Submit">
+</form>
+</body>
+</html>
+
+================================
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+String message=(String)request.getAttribute("msg");
+%>
+<h1 style="color: green;"><%out.println(message); %></h1>
+</body>
+</html>
+
+==================================
+package com.servlet;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class CreateConnection {
+
+	private CreateConnection() {}
+	private static Connection con=null;
+	static {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			 con=DriverManager.getConnection
+					("jdbc:oracle:thin:@localhost:1521:xe", "system", "oracle");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static Connection getConnection()
+	{
+		return con;
+	}
+}
+
+==================================
+package com.servlet;
+
+import jakarta.servlet.GenericServlet;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.annotation.WebServlet;
+import java.io.IOException;
+@WebServlet("/userinfo")
+public class RegisterServlet extends GenericServlet {
+	
+	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("/saveuser").forward(request, response);
+	}
+
+}
+========================
+package com.servlet;
+
+import jakarta.servlet.GenericServlet;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.annotation.WebServlet;
+import java.io.IOException;
+
+@WebServlet("/saveuser")
+public class SaveUserServlet extends GenericServlet {
+	
+	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+		UserBean ub=new UserBean();
+		ub.setPhno(Long.parseLong(request.getParameter("phno")));
+		ub.setpWord(request.getParameter("pword"));
+        ub.setuMailId(request.getParameter("mail"));
+        ub.setuName(request.getParameter("name"));
+        int k = new UserDao().save(ub);
+        if(k>0)
+        {
+        	request.setAttribute("msg", "User Registration SuccessFull");
+        	request.getRequestDispatcher("registersuccess.jsp").forward(request, response);
+        }
+        else {
+        	request.setAttribute("msg", "User Registration Failed");
+        	request.getRequestDispatcher("registerfailed.jsp").forward(request, response);
+        }
+	}
+
+}
+=================================
+package com.servlet;
+
+import java.io.Serializable;
+
+public class UserBean implements Serializable{
+
+	private String uName,uMailId,pWord;
+	private long phno;
+	public String getuName() {
+		return uName;
+	}
+	public void setuName(String uName) {
+		this.uName = uName;
+	}
+	public String getuMailId() {
+		return uMailId;
+	}
+	public void setuMailId(String uMailId) {
+		this.uMailId = uMailId;
+	}
+	public String getpWord() {
+		return pWord;
+	}
+	public void setpWord(String pWord) {
+		this.pWord = pWord;
+	}
+	public long getPhno() {
+		return phno;
+	}
+	public void setPhno(long phno) {
+		this.phno = phno;
+	}
+	@Override
+	public String toString() {
+		return "UserBean [uName=" + uName + ", uMailId=" + uMailId + ", pWord=" + pWord + ", phno=" + phno + "]";
+	}
+	
+	
+}
+=========================package com.servlet;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+public class UserDao {
+
+	int k=0;
+	public int save(UserBean ub)
+	{
+		try {
+			Connection con = CreateConnection.getConnection();
+			PreparedStatement ps=con.prepareStatement("insert into userinfo values(?,?,?,?)");
+			ps.setString(1, ub.getuName());
+			ps.setString(2, ub.getpWord());
+			ps.setString(3, ub.getuMailId());
+			ps.setLong(4, ub.getPhno());
+			 k = ps.executeUpdate();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return k;
+	}
+}
+

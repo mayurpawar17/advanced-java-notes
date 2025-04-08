@@ -1,0 +1,58 @@
+Program Statement: Complete User Management System using Servlets, JavaBeans, DAO Layer, and Communication
+
+🎯 Objective:
+=============
+Design and implement a web-based user management system using Java Servlets that includes user registration, profile viewing, and displaying a list of all registered users. The system should demonstrate usage of Servlet communication (RequestDispatcher, sendRedirect), JavaBeans for data encapsulation, and a DAO layer for database operations.
+
+📌 Functional Requirements:
+===========================
+1. User Registration (Add User):
+--------------------------------
+.A registration form collects user inputs: name, email, password, and phone number.
+.Data is submitted to RegisterServlet, which forwards the request to SaveUserServlet.
+.SaveUserServlet uses UserDAO to store user details in the database.
+.On successful registration, the user is redirected to the profile view page (UserProfileServlet).
+
+2. Servlet Communication:
+-------------------------
+.Use RequestDispatcher to forward requests between RegisterServlet and SaveUserServlet.
+
+3. JavaBean Usage:
+-------------------
+.A User JavaBean encapsulates all user data (name, email, password, phone).
+.The bean is used to transfer data between servlets and the DAO layer.
+
+4. DAO Layer:
+--------------
+.UserDAO should include methods for:
+.Saving a user to the database.
+.Retrieving a user by email.
+.Retrieving all users from the database.
+
+5. View Profile:
+----------------
+.UserProfileServlet should fetch and display details of a specific user using the email parameter.
+.Uses UserDAO.getUserByEmail() to retrieve and display the user’s data.
+
+6. View All Users:
+-------------------
+.ViewAllUsersServlet fetches a list of all registered users from the database.
+.Displays the list in a table format on the web page.
+.Uses UserDAO.getAllUsers() to retrieve the data.
+
+7. Servlet Life Cycle Logging:
+------------------------------
+.Create a servlet (AppLifecycleLoggerServlet) that demonstrates the use of servlet life cycle methods:
+.Override the init() method to log a message when the servlet is initialized.
+.Override the service() method to log a message every time the servlet processes a request.
+.Override the destroy() method to log a message when the servlet is taken out of service.
+.Deploy this servlet and observe the output in the server console or logs to understand the servlet life cycle in action.
+
+🛠 Technical Constraints:
+--------------------------
+.Use JDBC for all database operations.
+.Follow MVC architecture for separation of concerns.
+.Servlets handle the controller logic.
+.JavaBeans act as the model.
+.HTML/JSP can be used for the view layer.
+.Use POST method for form submission and GET for viewing data.

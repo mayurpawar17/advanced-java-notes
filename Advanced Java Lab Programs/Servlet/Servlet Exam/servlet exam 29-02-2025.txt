@@ -1,0 +1,23 @@
+
+Coding Problem 1: Establishing a Database Connection Using JDBC
+Problem Title: Database Connection Manager
+Description:
+Write a Java program that establishes a connection to a database using the JDBC API. The program should allow the user to specify the database type (e.g., MySQL, PostgreSQL) and handle exceptions appropriately. Use a Type 4 JDBC driver (pure Java driver) for this task.
+Requirements:
+1.	Use the DriverManager class to establish a connection.
+2.	Prompt the user to input the database URL, username, and password.
+3.	Handle potential exceptions (e.g., SQLException, ClassNotFoundException).
+4.	Print a success message if the connection is established, or an error message if it fails.
+5.	Close the connection properly after use.
+
+Coding Problem 2: Querying a Database with JDBC
+Problem Title: Employee Data Retriever
+Description:
+Write a Java program that connects to a database using JDBC, executes a SQL query to retrieve data from an "employees" table, and displays the results. The program should use a prepared statement to prevent SQL injection and allow the user to filter employees by department.
+Requirements:
+1.	Assume a table named employees with columns: id (int), name (varchar), department (varchar), and salary (double).
+2.	Use a Type 4 JDBC driver.
+3.	Prompt the user to input a department name.
+4.	Use a PreparedStatement to query employees from the specified department.
+5.	Display the results in a formatted manner (e.g., ID, Name, Department, Salary).
+6.	Handle exceptions and close all resources (Connection, PreparedStatement, ResultSet).
